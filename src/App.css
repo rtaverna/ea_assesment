@@ -1,5 +1,12 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  background-color: lightblue;
 }
 
 .App-logo {
@@ -24,10 +31,29 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.info {
+  border-style: solid;
+  border-width: 5px;
+  border-radius: 5px;
+  border-color: rgb(102, 102, 218);
+  padding-bottom: 5px;
+  background-color: white;
+  margin-top: 15px;
+  
 }
+.charts {
+  display: flex;
+  justify-content: center;
+  border-style: solid;
+  border-width: 5px;
+  border-radius: 5px;
+  border-color: rgb(102, 102, 218);
+  background-color: white;
+}
+.buttons  {
+  padding: 5%;
 
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

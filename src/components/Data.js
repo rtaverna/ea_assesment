@@ -1,13 +1,21 @@
 import React, {Component} from "react";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import 'react-tabs/style/react-tabs.css';
 import axios from "axios";
 import Programs from "./programs";
 import Ethnicity from "./ethnicity";
 import SAT from "./SAT";
 
+const ref = React.createRef();
+
 class Data extends Component    {
     constructor() {
         super();
         this.state = {data: {}}
+        this.printDocument = this.printDocument.bind(this)
+        this.downloadTxtFile = this.downloadTxtFile.bind(this)
     }
 
     componentDidMount() {
@@ -22,6 +30,29 @@ class Data extends Component    {
              
 
     }
+
+    printDocument() {
+        const input = document.getElementById('divToPrint');
+        html2canvas(input)
+          .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+            pdf.addImage(imgData, 'JPEG', 0, 0);
+            pdf.save("school-data.pdf");
+          })
+        ;
+      }
+
+    downloadTxtFile = () => {
+        const element = document.createElement('a');
+        const file = new Blob([document.getElementById('info').value],    
+                    {type: 'text/plain;charset=utf-8'});
+        element.href = URL.createObjectURL(file);
+        element.download = "myFile.txt";
+        document.body.appendChild(element);
+        element.click();
+    }
+
     render()    {
         let display;
         if (!this.state.data.id)   {
@@ -35,22 +66,45 @@ class Data extends Component    {
             let years = Object.keys(this.state.data).filter(val => val.length === 4)
             let avgScore = years.map((year) => {return {'x': year, 'y': this.state.data[year].admissions.sat_scores.average.overall}})
             let validScores = avgScore.filter(score => score.y !== null)
-            console.log(validScores)
-
+            const downloadData = "text/json;charset=utf-8," + JSON.stringify(this.state.data.school);
             
             display =  (
-               <>    
-                <h1>{this.state.data.school.name}</h1>
-                <h2>{this.state.data.school.alias}</h2>
-                <p>{this.state.data.school.city}, {this.state.data.school.state} {this.state.data.school.zip}</p>
-                <a href={"http://"+this.state.data.school.school_url}>Website</a>
-                <p>{this.state.data[2018].student.size} Students</p>
-                <div className="charts">
-                    <Programs data={programChartData}/>
-                    <Ethnicity data={valData}/>
-                    {/* <SAT data={validScores}/> */}
+               <div id="divToPrint" >
+                <div id="info"className="info">  
+                    <a href={"http://"+this.state.data.school.school_url}><h1>{this.state.data.school.name}</h1></a>
+                    <h2>{this.state.data.school.alias}</h2>
+                    <p>{this.state.data.school.city}, {this.state.data.school.state} {this.state.data.school.zip}</p>
+                    <p>In 2018, {this.state.data[2018].student.size} students were enrolled in {this.state.data.school.name}</p>
                 </div>
-               </>
+                <div>
+                    <p>Explore Data by Category:</p>
+                </div>
+                <div className="charts">
+                    <Tabs>
+                        <TabList>
+                            <Tab>Program Enrollment</Tab>
+                            <Tab>Ethnicity</Tab>
+                            <Tab>SAT</Tab>
+                        </TabList>
+ 
+                        <TabPanel>
+                            <Programs data={programChartData}/>
+                        </TabPanel>
+                        <TabPanel>
+                            <Ethnicity data={valData}/>
+                        </TabPanel>
+                        <TabPanel>
+                            <SAT data={validScores}/>
+                        </TabPanel>
+                    </Tabs>  
+                </div>
+                <div className="buttons">
+                    <button onClick={this.printDocument}>Save as PDF</button>
+                    <button onClick={() => window.print()}>Print</button>                    
+                    <a href={`data: ${downloadData}`} download="data.json"><button>Download Data</button></a>
+                </div>
+                
+               </div>
             )
         }
         return (

@@ -1,0 +1,15 @@
+<div className="charts">
+                    
+                  {/* <Tabs>
+                    <Tab title="Programs"><Programs data={programChartData}/></Tab>
+                    <Tab title="Ethnicity"><Ethnicity data={valData}/></Tab>
+                    <Tab title="SAT"><Ethnicity data={valData}/></Tab> */}
+
+                    {/* <SAT data={validScores}/> */}
+                  {/* </Tabs> */}
+                </div>
+                <div className="buttons">
+                    <button>Print</button>
+                    <button>Download</button>
+                    <button>Save as PDF</button>
+                </div>
