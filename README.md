@@ -1,10 +1,22 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Setup:
+
+Follow these steps:
+
+* `npm install`
+* Create a file called `.env.local` in the root of the project
+    * This file is listed in the `.gitignore`, and will be used to attach your API Key so as not to publish this to Github
+    * It should look something like:
+    ```
+    REACT_APP_API_KEY="YOUR_API_KEY"
+    ```
+
+### 'npm install'
+
 ## Available Scripts
 
 Run:
-
-### 'npm install'
 
 ### `npm start`
 
