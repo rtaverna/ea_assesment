@@ -73,14 +73,16 @@ class Data extends Component    {
                 <div id="info"className="info">  
                     <a href={"http://"+this.state.data.school.school_url}><h1>{this.state.data.school.name}</h1></a>
                     <h2>{this.state.data.school.alias}</h2>
-                    <p>{this.state.data.school.city}, {this.state.data.school.state} {this.state.data.school.zip}</p>
-                    <p>In 2018, {this.state.data[2018].student.size} students were enrolled in {this.state.data.school.name}</p>
+                    <h3 id="address">{this.state.data.school.city}, {this.state.data.school.state} {this.state.data.school.zip}</h3>
+                    <p>In 2018, <span id="population">{this.state.data[2018].student.size}</span> students were enrolled in {this.state.data.school.name}<br />
+                    Explore data by category below</p>
                 </div>
                 <div>
-                    <p>Explore Data by Category:</p>
+                    <p></p>
                 </div>
                 <div className="charts">
-                    <Tabs>
+                
+                    <Tabs className= "tabs"width={"fit-content"}>
                         <TabList>
                             <Tab>Program Enrollment</Tab>
                             <Tab>Ethnicity</Tab>

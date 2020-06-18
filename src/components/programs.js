@@ -5,6 +5,7 @@ const Programs = (props) => {
     return(
         <DonutChart
             data={props.data}
+          
         />
     )
 }
