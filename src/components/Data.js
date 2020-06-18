@@ -8,7 +8,6 @@ import Programs from "./programs";
 import Ethnicity from "./ethnicity";
 import SAT from "./SAT";
 
-const ref = React.createRef();
 
 class Data extends Component    {
     constructor() {
@@ -27,8 +26,6 @@ class Data extends Component    {
                  console.log('data: ',data)
                  this.setState({data: data})
              })
-             
-
     }
 
     printDocument() {
@@ -39,9 +36,8 @@ class Data extends Component    {
             const pdf = new jsPDF();
             pdf.addImage(imgData, 'JPEG', 0, 0);
             pdf.save("school-data.pdf");
-          })
-        ;
-      }
+          });
+    }
 
     downloadTxtFile = () => {
         const element = document.createElement('a');
@@ -58,62 +54,59 @@ class Data extends Component    {
         if (!this.state.data.id)   {
             display = <p>...</p>
         }   else    {
-            let programData = this.state.data[2018].academics.program_percentage
-            let programChartData = Object.keys(programData).map((program) => {return {'label': program, 'value': programData[program] } })
-            let ethnicityData = this.state.data[2018].student.demographics.race_ethnicity
-            let ethnicityChartData = Object.keys(ethnicityData).map((ethnicity) => {return {'label': ethnicity, 'value': ethnicityData[ethnicity] } })
-            let valData = ethnicityChartData.filter((ethn) => ethn.value !== null)
-            let years = Object.keys(this.state.data).filter(val => val.length === 4)
-            let avgScore = years.map((year) => {return {'x': year, 'y': this.state.data[year].admissions.sat_scores.average.overall}})
-            let validScores = avgScore.filter(score => score.y !== null)
-            const downloadData = "text/json;charset=utf-8," + JSON.stringify(this.state.data.school);
+                let programData = this.state.data[2018].academics.program_percentage
+                let programChartData = Object.keys(programData).map((program) => {return {'label': program, 'value': programData[program] } })
+                let ethnicityData = this.state.data[2018].student.demographics.race_ethnicity
+                let ethnicityChartData = Object.keys(ethnicityData).map((ethnicity) => {return {'label': ethnicity, 'value': ethnicityData[ethnicity] } })
+                let valData = ethnicityChartData.filter((ethn) => ethn.value !== null)
+                let years = Object.keys(this.state.data).filter(val => val.length === 4)
+                let avgScore = years.map((year) => {return {'x': year, 'y': this.state.data[year].admissions.sat_scores.average.overall}})
+                let validScores = avgScore.filter(score => score.y !== null)
+                const downloadData = "text/json;charset=utf-8," + JSON.stringify(this.state.data.school);
             
-            display =  (
-               <div id="divToPrint" >
-                <div id="info"className="info">  
-                    <a href={"http://"+this.state.data.school.school_url}><h1>{this.state.data.school.name}</h1></a>
-                    <h2>{this.state.data.school.alias}</h2>
-                    <h3 id="address">{this.state.data.school.city}, {this.state.data.school.state} {this.state.data.school.zip}</h3>
-                    <p>In 2018, <span id="population">{this.state.data[2018].student.size}</span> students were enrolled in {this.state.data.school.name}<br />
-                    Explore data by category below</p>
-                </div>
+                display =  (
+                    <div id="divToPrint" >
+                        <div id="info"className="info">  
+                            <a href={"http://"+this.state.data.school.school_url}><h1>{this.state.data.school.name}</h1></a>
+                            <h2>{this.state.data.school.alias}</h2>
+                            <h3 id="address">{this.state.data.school.city}, {this.state.data.school.state} {this.state.data.school.zip}</h3>
+                            <p>In 2018, <span id="population">{this.state.data[2018].student.size}</span> students were enrolled in {this.state.data.school.name}<br />
+                            Explore data by category below</p>
+                        </div>
+                        <div>
+                            <p></p>
+                        </div>
+                        <div className="charts">
+                            <Tabs className= "tabs"width={"fit-content"}>
+                                <TabList>
+                                    <Tab>Program Enrollment</Tab>
+                                    <Tab>Ethnicity</Tab>
+                                    <Tab>SAT</Tab>
+                                </TabList>
+                                <TabPanel>
+                                    <Programs data={programChartData}/>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Ethnicity data={valData}/>
+                                </TabPanel>
+                                <TabPanel>
+                                    <SAT data={validScores}/>
+                                </TabPanel>
+                            </Tabs>  
+                        </div>
+                        <div className="buttons">
+                            <button onClick={this.printDocument}>Save as PDF</button>
+                            <button onClick={() => window.print()}>Print</button>                    
+                            <a href={`data: ${downloadData}`} download="data.json"><button>Download Data</button></a>
+                        </div>
+                    </div>
+                )
+            }
+            return (
                 <div>
-                    <p></p>
+                    {display}    
                 </div>
-                <div className="charts">
-                
-                    <Tabs className= "tabs"width={"fit-content"}>
-                        <TabList>
-                            <Tab>Program Enrollment</Tab>
-                            <Tab>Ethnicity</Tab>
-                            <Tab>SAT</Tab>
-                        </TabList>
- 
-                        <TabPanel>
-                            <Programs data={programChartData}/>
-                        </TabPanel>
-                        <TabPanel>
-                            <Ethnicity data={valData}/>
-                        </TabPanel>
-                        <TabPanel>
-                            <SAT data={validScores}/>
-                        </TabPanel>
-                    </Tabs>  
-                </div>
-                <div className="buttons">
-                    <button onClick={this.printDocument}>Save as PDF</button>
-                    <button onClick={() => window.print()}>Print</button>                    
-                    <a href={`data: ${downloadData}`} download="data.json"><button>Download Data</button></a>
-                </div>
-                
-               </div>
             )
-        }
-        return (
-            <div>
-                {display}    
-            </div>
-        )
     }
 }
 
