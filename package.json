@@ -10,7 +10,7 @@
     "axios": "^0.19.2",
     "canvasjs": "^1.8.3",
     "html2canvas": "^1.0.0-rc.5",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-donut-chart": "^1.1.8",
